@@ -26,10 +26,7 @@ timeseries_plot(G_power_avg, 'g', ts_label)
 
 # "Grid search" of seasonal ARIMA model.
 # the seasonal periodicy 24 hours, i.e. S=24*60/30 = 48 samples
-arima_para = {}
-arima_para['p'] = range(2)
-arima_para['d'] = range(2)
-arima_para['q'] = range(2)
+arima_para = {'p': range(2), 'd': range(2), 'q': range(2)}
 # the seasonal periodicy is  24 hours
 seasonal_para = round(24 * 60 / (float(bucket_size[:-1])))
 arima = Arima_Class(arima_para, seasonal_para)

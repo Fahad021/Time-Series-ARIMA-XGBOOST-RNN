@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 
 def preprocess(N_rows, parse_dates, filename):
-    total_rows = sum(1 for l in open(filename))
+    total_rows = sum(1 for _ in open(filename))
     variable_names = pd.read_csv(
         filename, header=0, delimiter=';', sep='', nrows=5)
     df = pd.read_csv(filename, header=0, delimiter=';', sep='', names=variable_names.columns,
@@ -39,10 +39,7 @@ def timeseries_plot(y, color, y_label):
 
 
 def bucket_avg(ts, bucket):
-    # ts is Sereis with index
-    # bucket =["30T","60T","M".....]
-    y = ts.resample(bucket).mean()
-    return y
+    return ts.resample(bucket).mean()
 
 
 def config_plot():
@@ -78,9 +75,10 @@ def date_transform(df, encode_cols):
 def get_unseen_data(unseen_start, steps, encode_cols, bucket_size):
     index = pd.date_range(unseen_start,
                           periods=steps, freq=bucket_size)
-    df = pd.DataFrame(pd.Series(np.zeros(steps), index=index),
-                      columns=['Global_active_power'])
-    return df
+    return pd.DataFrame(
+        pd.Series(np.zeros(steps), index=index),
+        columns=['Global_active_power'],
+    )
 
 # dynamic xgboost
 # shift 2 steps for every lag
@@ -90,6 +88,4 @@ def data_add_timesteps(data, column, lag):
     column = data[column]
     step_columns = [column.shift(i) for i in range(2, lag + 1, 2)]
     df_steps = pd.concat(step_columns, axis=1)
-    # current Global_active_power is at first columns
-    df = pd.concat([data, df_steps], axis=1)
-    return df
+    return pd.concat([data, df_steps], axis=1)

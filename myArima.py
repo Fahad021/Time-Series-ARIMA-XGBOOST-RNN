@@ -31,16 +31,16 @@ class Arima_Class:
                                                     enforce_invertibility=False)
                     results = mod.fit()
 
-                    print('ARIMA{}x{}seasonal - AIC:{}'.format(param,
-                                                               param_seasonal, results.aic))
+                    print(f'ARIMA{param}x{param_seasonal}seasonal - AIC:{results.aic}')
                     results_list.append([param, param_seasonal, results.aic])
                 except:
                     continue
         results_list = np.array(results_list)
         lowest_AIC = np.argmin(results_list[:, 2])
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
-        print('ARIMA{}x{}seasonal with lowest_AIC:{}'.format(
-            results_list[lowest_AIC, 0], results_list[lowest_AIC, 1], results_list[lowest_AIC, 2]))
+        print(
+            f'ARIMA{results_list[lowest_AIC, 0]}x{results_list[lowest_AIC, 1]}seasonal with lowest_AIC:{results_list[lowest_AIC, 2]}'
+        )
         print('+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++')
 
         mod = sm.tsa.statespace.SARIMAX(ts,
